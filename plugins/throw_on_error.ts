@@ -3,7 +3,7 @@ import { Raw } from "../core/parsers.ts";
 
 export const throwOnError: Plugin = (client) => {
   const emitError = (msg: Raw) => {
-    if (msg.command !== "ERROR") {
+    if (!msg.command.startsWith("ERR")) {
       return;
     }
 

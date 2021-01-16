@@ -25,6 +25,7 @@ describe("plugins/invalid_names", (test) => {
     });
 
     server.send(":serverhost 433 me new_nick :Nickname is already in use");
+    client.once("error");
     await client.once("raw");
     const raw = server.receive();
 
@@ -38,6 +39,7 @@ describe("plugins/invalid_names", (test) => {
     });
 
     server.send(":serverhost 432 me `^$ :Erroneous nickname");
+    client.once("error");
     await client.once("raw");
     const raw = server.receive();
 
@@ -51,6 +53,7 @@ describe("plugins/invalid_names", (test) => {
     });
 
     server.send(":serverhost 468 * USER :Your username is not valid");
+    client.once("error");
     await client.once("raw");
     const raw = server.receive();
 
@@ -63,12 +66,18 @@ describe("plugins/invalid_names", (test) => {
       resolveInvalidNames: false,
     });
 
+    const noop = () => {};
+    client.on("error", noop);
+
     server.send(":serverhost 433 me new_nick :Nickname is already in use");
     await client.once("raw");
+
     server.send(":serverhost 432 me `^$ :Erroneous nickname");
     await client.once("raw");
+
     server.send(":serverhost 468 * USER :Your username is not valid");
     await client.once("raw");
+
     const raw = server.receive();
 
     assertEquals(raw, []);
