@@ -59,7 +59,7 @@ export class CoreClient<
 > {
   readonly state: CoreParams["state"];
 
-  protected connectImpl = Deno.connect;
+  protected connectImpl = Deno.connectTls;
   protected conn: Deno.Conn | null = null;
   protected hooks = new Hooks(this);
 
